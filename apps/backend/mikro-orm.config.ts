@@ -13,7 +13,7 @@ import { Comment } from './src/article/comment.entity';
 import { InitialMigration } from './src/migrations/InitialMigration';
 
 export default defineConfig({
-  host: 'localhost',
+  host: 'mysql',
   port: 3306,
   user: 'conduit',
   password: 'conduit',

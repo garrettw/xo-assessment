@@ -1,0 +1,31 @@
+version: '3'
+services:
+    node:
+        build:
+            context: .
+        ports:
+            - '3000:3000'
+            - '4200:4200'
+        volumes:
+            - '.:/app'
+        networks:
+            - nodeapp
+        depends_on:
+            - mysql
+    mysql:
+        image: 'mysql:8.1'
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: 'conduit'
+            MYSQL_DATABASE: 'conduit'
+            MYSQL_USER: 'conduit'
+            MYSQL_PASSWORD: 'conduit'
+        volumes:
+            - 'dbdata:/var/lib/mysql'
+        networks:
+            - nodeapp
+networks:
+    nodeapp:
+volumes:
+    dbdata:
