@@ -58,6 +58,11 @@ export class ArticleEditComponent implements OnInit, OnDestroy {
   }
 
   updateForm(changes: any) {
+    // Ensure the internal representation of tagList is kept as an array
+    // but we'll wait until the publishArticle effect to trim each tag
+    if (changes.tagList && typeof changes.tagList === 'string') {
+      changes.tagList = changes.tagList.split(',');
+    }
     this.store.dispatch(formsActions.updateData({ data: changes }));
   }
 
