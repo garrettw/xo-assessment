@@ -6,12 +6,14 @@ import { UserModule } from '../user/user.module';
 import { ArticleController } from './article.controller';
 import { Article } from './article.entity';
 import { ArticleService } from './article.service';
+import { Tag } from '../tag/tag.entity';
+import { TagService } from '../tag/tag.service';
 import { Comment } from './comment.entity';
 
 @Module({
   controllers: [ArticleController],
-  imports: [MikroOrmModule.forFeature({ entities: [Article, Comment, User] }), UserModule],
-  providers: [ArticleService],
+  imports: [MikroOrmModule.forFeature({ entities: [Article, Comment, User, Tag] }), UserModule],
+  providers: [ArticleService, TagService],
 })
 export class ArticleModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

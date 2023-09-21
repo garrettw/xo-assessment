@@ -8,6 +8,7 @@ import { Article } from './article.entity';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { Comment } from './comment.entity';
 import { CreateArticleDto, CreateCommentDto } from './dto';
+import { TagService } from '../tag/tag.service';
 
 @Injectable()
 export class ArticleService {
@@ -19,6 +20,7 @@ export class ArticleService {
     private readonly commentRepository: EntityRepository<Comment>,
     @InjectRepository(User)
     private readonly userRepository: EntityRepository<User>,
+    private readonly tagService: TagService,
   ) {}
 
   async findAll(userId: number, query: Record<string, string>): Promise<IArticlesRO> {
@@ -156,6 +158,7 @@ export class ArticleService {
     const article = new Article(user!, dto.title, dto.description, dto.body);
     article.tagList.push(...dto.tagList);
     user?.articles.add(article);
+    await this.tagService.insertNewTags(article.tagList);
     await this.em.flush();
 
     return { article: article.toJSON(user!) };
@@ -168,6 +171,7 @@ export class ArticleService {
     );
     const article = await this.articleRepository.findOne({ slug }, { populate: ['author'] });
     wrap(article).assign(articleData);
+    await this.tagService.insertNewTags(articleData.tagList || []);
     await this.em.flush();
 
     return { article: article!.toJSON(user!) };
